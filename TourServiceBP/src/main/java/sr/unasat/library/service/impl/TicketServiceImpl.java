@@ -1,8 +1,10 @@
 package sr.unasat.library.service.impl;
+
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import sr.unasat.library.entity.Ticket;
 import sr.unasat.library.repository.TicketRepo;
@@ -11,28 +13,40 @@ import sr.unasat.library.service.TicketService;
 @Service
 public class TicketServiceImpl implements TicketService {
 
-    @Autowired
-    TicketRepo ticketRepo;
+
+    private TicketRepo ticketRepo;
 
     @Override
-    public Ticket add(Ticket ticket){
+   public Ticket createTicket(Ticket ticket){
         return ticketRepo.save(ticket);
     }
 
-    @Override
-    public List get(){
+   @Override
+   public Ticket getTicketById(Long ticketId){
+        Optional<Ticket> optionalTicket = ticketRepo.findById(ticketId);
+        return  optionalTicket.get();
+   }
+
+   @Override
+    public List<Ticket>getAllTickets(){
         return ticketRepo.findAll();
-    }
+   }
 
-    @Override
-    public Optional get(Long id){
-        return ticketRepo.findById(id);
-    }
+   @Override
+    public Ticket updateTicket(Ticket ticket){
+        Ticket existingTicket = ticketRepo.findById(ticket.getId()).get();
+        existingTicket.setDepartingLocation(ticket.getDepartingLocation());
+        existingTicket.setDepartDate(ticket.getDepartDate());
+        existingTicket.setReturnDate(ticket.getReturnDate());
+        existingTicket.setTourist(ticket.getTourist());
 
-    @Override
-    public void delete(Long id){
-        if (get(id).isPresent()) {
-            ticketRepo.delete((Ticket) get(id).get());
-        }
-    }
+        Ticket updatedTicket = ticketRepo.save(existingTicket);
+
+        return updatedTicket;
+   }
+
+   @Override
+    public void deleteTicket(Long ticketId){
+        ticketRepo.deleteById(ticketId);
+   }
 }

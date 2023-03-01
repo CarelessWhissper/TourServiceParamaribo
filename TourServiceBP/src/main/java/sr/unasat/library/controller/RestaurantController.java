@@ -2,9 +2,10 @@ package sr.unasat.library.controller;
 
 
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.AllArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,63 +13,57 @@ import org.springframework.web.bind.annotation.*;
 import sr.unasat.library.service.RestaurantService;
 import sr.unasat.library.entity.Restaurant;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api")
 public class RestaurantController {
 
-    @Autowired
-     RestaurantService restaurantService;
+    private RestaurantService service;
 
-    @GetMapping("/restaurants")
-    public ResponseEntity<List<Restaurant>> getAllRestaurants() {
-        try {
-            List<Restaurant> list = restaurantService.get();
+    //build get restaurant REST API
 
-            if (list.isEmpty() || list.size() == 0) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-
-            return new ResponseEntity<>(list, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @PostMapping
+    public ResponseEntity<Restaurant>createRestaurant(@RequestBody Restaurant restaurant){
+        Restaurant savedRestaurant = service.createRestaurant(restaurant);
+        return  new ResponseEntity<>(savedRestaurant,HttpStatus.CREATED);
     }
 
-    @GetMapping("/restaurants/{id}")
-    public ResponseEntity<Restaurant> getRestaurants(@PathVariable Long id) {
-        Optional<Restaurant> restaurant = restaurantService.get(id);
+    //build get restaurant by Id REST API
 
-        if (restaurant.isPresent()) {
-            return new ResponseEntity<Restaurant>(restaurant.get(), HttpStatus.OK);
-        }
-        return new ResponseEntity<Restaurant>(HttpStatus.NOT_FOUND);
-    }
+    @GetMapping("{id}")
+    public ResponseEntity<Restaurant>getRestaurantById(@PathVariable("id")Long restaurantId){
+        Restaurant restaurant = service.getRestaurantById(restaurantId);
 
-    @PostMapping("/restaurants")
-    public ResponseEntity<Restaurant> saveRestaurant(@RequestBody Restaurant restaurant) {
-        try {
-            return new ResponseEntity<Restaurant>(restaurantService.add(restaurant), HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<Restaurant>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    @PutMapping("/restaurants")
-    public ResponseEntity<Restaurant> updateRestaurant(@RequestBody Restaurant restaurant) {
-        try {
-            return new ResponseEntity<Restaurant>(restaurantService.add(restaurant), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<Restaurant>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity<>(restaurant,HttpStatus.OK);
     }
 
-    @DeleteMapping("/restaurant/{id}")
-    public ResponseEntity<HttpStatus> deleteRestaurant(@PathVariable Long id) {
-        try {
-            restaurantService.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    //build get all restaurants REST API
+
+    @GetMapping
+    public ResponseEntity<List<Restaurant>>getAllRestaurants(){
+        List<Restaurant> restaurants= service.getAllRestaurant();
+
+        return new ResponseEntity<>(restaurants,HttpStatus.OK);
     }
+
+    //build update restaurant REST API
+    @PutMapping("{id}")
+    public ResponseEntity<Restaurant>updateRestaurant(@PathVariable("id")Long restaurantId,
+                                                      @RequestBody Restaurant restaurant){
+        restaurant.setId(restaurantId);
+        Restaurant updatedRestaurant = service.updateRestaurant(restaurant);
+        return  new ResponseEntity<>(updatedRestaurant,HttpStatus.OK);
+    }
+
+
+    //build delete Restaurant REST API
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteRestaurant(@PathVariable("id")Long restaurantId){
+        service.deleteRestaurant(restaurantId);
+        return new ResponseEntity<>("Restaurant has been deleted",HttpStatus.OK);
+    }
+
+
 }

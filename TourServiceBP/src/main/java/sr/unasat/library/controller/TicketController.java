@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,67 +12,53 @@ import org.springframework.web.bind.annotation.*;
 import sr.unasat.library.entity.Ticket;
 import sr.unasat.library.service.TicketService;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
-@RequestMapping("/api")
+@AllArgsConstructor
+@RequestMapping("/api/tickets")
 public class TicketController
 {
-    @Autowired
-    TicketService ticketService;
+  private TicketService ticketService;
 
-    @GetMapping("/tickets")
-    public ResponseEntity<List<Ticket>> getAllTickets() {
-        try {
-            List<Ticket> list = ticketService.get();
+  //build create ticket REST API
+   @PostMapping
+   public ResponseEntity<Ticket>createTicket(@RequestBody Ticket ticket){
+       Ticket savedTicket = ticketService.createTicket(ticket);
+       return new ResponseEntity<>(savedTicket,HttpStatus.CREATED);
+   }
 
-            if (list.isEmpty() || list.size() == 0) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
+   //build get ticket by Id REST API
 
-            return new ResponseEntity<>(list, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @GetMapping("{id}")
+    public ResponseEntity<Ticket>getTicketById(@PathVariable("id")Long ticketId){
+       Ticket ticket = ticketService.getTicketById(ticketId);
+       return  new ResponseEntity<>(ticket,HttpStatus.OK);
     }
 
-    @GetMapping("/tickets/{id}")
-    public ResponseEntity<Ticket> getTickets(@PathVariable Long id) {
-        Optional<Ticket> tickets = ticketService.get(id);
+    //build get all tickets REST API
 
-        if (tickets.isPresent()) {
-            return new ResponseEntity<Ticket>(tickets.get(), HttpStatus.OK);
-        }
-        return new ResponseEntity<Ticket>(HttpStatus.NOT_FOUND);
+    @GetMapping
+    public ResponseEntity<List<Ticket>>getAllTickets(){
+       List<Ticket> tickets = ticketService.getAllTickets();
+
+       return  new ResponseEntity<>(tickets,HttpStatus.OK);
     }
 
+    //build update ticket REST API
 
-    @PostMapping("/tickets")
-    public ResponseEntity<Ticket> saveTickets(@RequestBody Ticket ticket) {
-        try {
-            return new ResponseEntity<Ticket>(ticketService.add(ticket), HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<Ticket>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @PutMapping
+    public ResponseEntity<Ticket> updateTicket(@PathVariable("id")Long ticketId,
+                                               @RequestBody Ticket ticket){
+       ticket.setId(ticketId);
+       Ticket updatedTicket = ticketService.updateTicket(ticket);
+       return  new ResponseEntity<>(updatedTicket,HttpStatus.OK);
     }
+    //build Delete Ticket REST API
 
-
-    @PutMapping("/tickets")
-    public ResponseEntity<Ticket> updateTicket(@RequestBody Ticket ticket) {
-        try {
-            return new ResponseEntity<Ticket>(ticketService.add(ticket), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<Ticket>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @DeleteMapping("/tickets/{id}")
-    public ResponseEntity<HttpStatus> deleteTicket(@PathVariable Long id) {
-        try {
-            ticketService.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @DeleteMapping("{id}")
+    public ResponseEntity<String>deleteTicket (@PathVariable("id")Long ticketId){
+       ticketService.deleteTicket(ticketId);
+       return  new ResponseEntity<>("Ticket has been deleted",HttpStatus.OK);
     }
 
 

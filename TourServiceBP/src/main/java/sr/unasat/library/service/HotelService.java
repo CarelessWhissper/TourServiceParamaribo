@@ -1,16 +1,19 @@
 package sr.unasat.library.service;
 
 import java.util.List;
-import java.util.Optional;
+
 import sr.unasat.library.entity.Hotel;
 
 public interface HotelService {
 
-    Hotel add(Hotel hotel);
+    Hotel createHotel(Hotel hotel);
 
-    List get();
+    Hotel getHotelById(Long HotelId);
 
-    Optional get(Long id);
+    List<Hotel>getAllHotels();
 
-    void delete(Long id);
+    Hotel updateHotel(Hotel hotel);
+
+    void deleteHotel(Long HotelId);
+
 }

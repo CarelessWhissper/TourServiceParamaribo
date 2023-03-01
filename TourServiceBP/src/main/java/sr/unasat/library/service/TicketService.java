@@ -1,17 +1,21 @@
 package sr.unasat.library.service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 import sr.unasat.library.entity.Ticket;
 
 public interface TicketService {
 
-    Ticket add(Ticket ticket);
+   Ticket createTicket (Ticket ticket);
 
-    List get();
+   Ticket getTicketById(Long TicketId);
 
-    Optional get(Long id);
+   List<Ticket>getAllTickets();
 
-    void delete(Long id);
+   Ticket updateTicket( Ticket ticket);
+
+   void deleteTicket(Long TicketId);
+
+
 }

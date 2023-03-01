@@ -3,7 +3,8 @@ package sr.unasat.library.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,63 +23,56 @@ import sr.unasat.library.service.HotelService;
 
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController
-@RequestMapping("/api")
+@AllArgsConstructor
+@RequestMapping("/api/hotel")
 public class HotelController {
 
-    @Autowired
-    HotelService hotelService;
+    private HotelService service;
 
-    @GetMapping("/hotels")
-    public ResponseEntity<List<Hotel>> getAllHotels() {
-        try {
-            List<Hotel> list = hotelService.get();
+    //build create Hotel REST API
 
-            if (list.isEmpty() || list.size() == 0) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-
-            return new ResponseEntity<>(list, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @PostMapping
+    public ResponseEntity<Hotel> createHotel(@RequestBody Hotel hotel){
+        Hotel savedHotel = service.createHotel(hotel);
+        return  new ResponseEntity<>(savedHotel,HttpStatus.CREATED);
     }
 
+    //build get Hotel by id REST API
 
-    @GetMapping("/hotels/{id}")
-    public ResponseEntity<Hotel> getHotel(@PathVariable Long id) {
-        Optional<Hotel> hotel = hotelService.get(id);
+    // http://localhost:8081/api/hotel/1
 
-        if (hotel.isPresent()) {
-            return new ResponseEntity<Hotel>(hotel.get(), HttpStatus.OK);
-        }
-        return new ResponseEntity<Hotel>(HttpStatus.NOT_FOUND);
+    @GetMapping("{id}")
+    public ResponseEntity<Hotel>getHotelById(@PathVariable("id")Long hotelId){
+        Hotel hotel = service.getHotelById(hotelId);
+        return new ResponseEntity<>(hotel,HttpStatus.OK);
     }
 
-
-    @PostMapping("/hotels")
-    public ResponseEntity<Hotel> saveHotel(@RequestBody Hotel hotel) {
-        try {
-            return new ResponseEntity<Hotel>(hotelService.add(hotel), HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<Hotel>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    // build get all users REST API
+    // http://localhost:8080/api/hotel
+    @GetMapping
+    public ResponseEntity<List<Hotel>> getAllHotels(){
+        List<Hotel> hotels = service.getAllHotels();
+        return new ResponseEntity<>(hotels,HttpStatus.OK);
     }
 
-    @PutMapping("/hotels")
-    public ResponseEntity<Hotel> updateHotel(@RequestBody Hotel hotel) {
-        try {
-            return new ResponseEntity<Hotel>(hotelService.add(hotel), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<Hotel>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    //build update Hotel REST API
+
+    @PutMapping
+    // http://localhost:8081/api/hotel/1
+
+    public ResponseEntity<Hotel> updateHotel(@PathVariable("id")Long hotelId,
+                                             @RequestBody Hotel hotel){
+        hotel.setId(hotelId);
+        Hotel updatedHotel = service.updateHotel(hotel);
+        return new ResponseEntity<>(updatedHotel,HttpStatus.OK);
     }
-    @DeleteMapping("/hotels/{id}")
-    public ResponseEntity<HttpStatus> deleteHotel(@PathVariable Long id) {
-        try {
-            hotelService.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
+    //build delete Hotel REST API
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteHotel(@PathVariable("id")Long HotelId){
+        service.deleteHotel(HotelId);
+        return new ResponseEntity<>("Hotel has been deleted",HttpStatus.OK);
     }
+
 }

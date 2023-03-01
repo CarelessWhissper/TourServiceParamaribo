@@ -2,39 +2,54 @@ package sr.unasat.library.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.apache.logging.log4j.util.Strings;
+import org.springframework.util.StringUtils;
 
 import  sr.unasat.library.entity.Restaurant;
 import sr.unasat.library.repository.RestaurantRepo;
 import sr.unasat.library.service.RestaurantService;
 
+
 @Service
+@AllArgsConstructor
 public class RestaurantServiceImpl implements RestaurantService {
-    @Autowired
-    RestaurantRepo restaurantRepo;
+
+    private RestaurantRepo repo;
 
     @Override
-    public Restaurant add(Restaurant restaurant){
-        return  restaurantRepo.save(restaurant);
+    public Restaurant createRestaurant(Restaurant restaurant){
+        return repo.save(restaurant);
     }
 
     @Override
-    public List get(){
-        return restaurantRepo.findAll();
-    }
-
-
-    @Override
-    public Optional get(Long id){
-        return  restaurantRepo.findById(id);
+    public Restaurant getRestaurantById(Long restaurantId){
+        Optional<Restaurant> optionalRestaurant = repo.findById(restaurantId);
+        return  optionalRestaurant.get();
     }
 
     @Override
-    public void delete(Long id) {
-        if (get(id).isPresent()) {
-            restaurantRepo.delete((Restaurant) get(id).get());
-        }
+    public List<Restaurant> getAllRestaurant(){
+        return repo.findAll();
+    }
+
+    @Override
+    public Restaurant updateRestaurant(Restaurant restaurant){
+        Restaurant existingRestaurant = repo.findById(restaurant.getId()).get();
+        existingRestaurant.setRestaurantName(restaurant.getRestaurantName());
+        existingRestaurant.setReservationDetails(restaurant.getReservationDetails());
+        existingRestaurant.setNumberOfPeople(restaurant.getNumberOfPeople());
+        existingRestaurant.setTourist(restaurant.getTourist());
+
+        Restaurant updatedRestaurant = repo.save(existingRestaurant);
+        return  updatedRestaurant;
+    }
+
+    @Override
+    public void deleteRestaurant(Long restaurantId){
+        repo.deleteById(restaurantId);
     }
 }

@@ -1,16 +1,19 @@
 package sr.unasat.library.service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 import sr.unasat.library.entity.Restaurant;
 public interface RestaurantService {
 
-    Restaurant add(Restaurant restaurant);
+   Restaurant createRestaurant( Restaurant restaurant);
 
-    List get();
+   Restaurant getRestaurantById(Long restaurantId);
 
-    Optional get(Long id);
+   List<Restaurant> getAllRestaurant();
 
-    void delete(Long id);
+   Restaurant updateRestaurant(Restaurant restaurant);
+
+   void deleteRestaurant(Long restaurantId);
+
 }
