@@ -101,13 +101,12 @@ section {
   z-index: 1000;
 }
 
-.header .logo img {
-  height: 4rem;
-}
+
 
 .header .navbar a {
   margin: 0 1rem;
   font-size: 1.6rem;
+  
 
   color: #fff;
 }
