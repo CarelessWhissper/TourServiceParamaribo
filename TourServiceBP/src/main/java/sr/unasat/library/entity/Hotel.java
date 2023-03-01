@@ -3,13 +3,12 @@ package sr.unasat.library.entity;
 import javax.persistence.*;
 
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Setter
 @Getter
@@ -36,6 +35,7 @@ public class Hotel {
 
     @Column
     private int NumberOfStayingDays;
+
 
 
 }

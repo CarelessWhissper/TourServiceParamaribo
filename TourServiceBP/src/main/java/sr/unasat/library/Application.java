@@ -10,10 +10,8 @@ import sr.unasat.library.controller.TouristController;
 
 
 
-@ComponentScan(basePackageClasses = RestaurantController.class)
-@ComponentScan(basePackageClasses = TicketController.class)
-@ComponentScan(basePackageClasses = TouristController.class)
-@ComponentScan(basePackageClasses = HotelController.class)
+
+@ComponentScan(basePackageClasses = {HotelController.class,RestaurantController.class,TouristController.class,TicketController.class})
 @SpringBootApplication
 
 public class Application {

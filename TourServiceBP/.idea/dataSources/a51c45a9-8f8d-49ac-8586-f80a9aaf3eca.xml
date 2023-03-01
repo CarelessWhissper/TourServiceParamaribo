@@ -918,5 +918,128 @@ SELECT|sys.sys_config
       <ObjectGrants>SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,RELOAD,SHUTDOWN,PROCESS,FILE,REFERENCES,INDEX,ALTER,SHOW DATABASES,SUPER,CREATE TEMPORARY TABLES,LOCK TABLES,EXECUTE,REPLICATION SLAVE,REPLICATION CLIENT,CREATE VIEW,SHOW VIEW,CREATE ROUTINE,ALTER ROUTINE,CREATE USER,EVENT,TRIGGER,CREATE TABLESPACE,CREATE ROLE,DROP ROLE!
 </ObjectGrants>
     </user>
+    <table id="287" parent="8" name="hotel"/>
+    <table id="288" parent="8" name="restaurant"/>
+    <table id="289" parent="8" name="ticket"/>
+    <table id="290" parent="8" name="tourist"/>
+    <column id="291" parent="287" name="tourist_id">
+      <Position>1</Position>
+      <DataType>bigint|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="292" parent="287" name="hotel_name">
+      <Position>2</Position>
+      <DataType>varchar(255)|0s</DataType>
+    </column>
+    <column id="293" parent="287" name="number_of_rooms">
+      <Position>3</Position>
+      <DataType>int|0s</DataType>
+    </column>
+    <column id="294" parent="287" name="number_of_staying_days">
+      <Position>4</Position>
+      <DataType>int|0s</DataType>
+    </column>
+    <column id="295" parent="287" name="reservation_details">
+      <Position>5</Position>
+      <DataType>datetime|0s</DataType>
+    </column>
+    <key id="296" parent="287" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>tourist_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="297" parent="287" name="FK9ivuehm9sqm4i3svxmr1wa2kw">
+      <ColNames>tourist_id</ColNames>
+      <RefTableName>tourist</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="298" parent="288" name="tourist_id">
+      <Position>1</Position>
+      <DataType>bigint|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="299" parent="288" name="number_of_people">
+      <Position>2</Position>
+      <DataType>int|0s</DataType>
+    </column>
+    <column id="300" parent="288" name="reservation_details">
+      <Position>3</Position>
+      <DataType>datetime|0s</DataType>
+    </column>
+    <column id="301" parent="288" name="restaurant_name">
+      <Position>4</Position>
+      <DataType>varchar(255)|0s</DataType>
+    </column>
+    <key id="302" parent="288" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>tourist_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="303" parent="288" name="FKcx5llnok9vnorrf44vga6gfoy">
+      <ColNames>tourist_id</ColNames>
+      <RefTableName>tourist</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="304" parent="289" name="id">
+      <Position>1</Position>
+      <DataType>bigint|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
+    </column>
+    <column id="305" parent="289" name="depart_date">
+      <Position>2</Position>
+      <DataType>datetime|0s</DataType>
+    </column>
+    <column id="306" parent="289" name="departing_location">
+      <Position>3</Position>
+      <DataType>varchar(255)|0s</DataType>
+    </column>
+    <column id="307" parent="289" name="return_date">
+      <Position>4</Position>
+      <DataType>datetime|0s</DataType>
+    </column>
+    <column id="308" parent="289" name="tourist_id">
+      <Position>5</Position>
+      <DataType>bigint|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="309" parent="289" name="FK2oh412hbj9ie3v46r5hxjaik1">
+      <ColNames>tourist_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="310" parent="289" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="311" parent="289" name="FK2oh412hbj9ie3v46r5hxjaik1">
+      <ColNames>tourist_id</ColNames>
+      <RefTableName>tourist</RefTableName>
+      <RefColNames>id</RefColNames>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="312" parent="290" name="id">
+      <Position>1</Position>
+      <DataType>bigint|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
+    </column>
+    <column id="313" parent="290" name="f_name">
+      <Position>2</Position>
+      <DataType>varchar(255)|0s</DataType>
+    </column>
+    <column id="314" parent="290" name="location_of_origin">
+      <Position>3</Position>
+      <DataType>varchar(255)|0s</DataType>
+    </column>
+    <column id="315" parent="290" name="date_of_birth">
+      <Position>4</Position>
+      <DataType>datetime|0s</DataType>
+    </column>
+    <key id="316" parent="290" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
   </database-model>
 </dataSource>

@@ -34,4 +34,9 @@ public class Ticket {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Tourist tourist;
+
+
+    public Ticket(){
+
+    }
 }

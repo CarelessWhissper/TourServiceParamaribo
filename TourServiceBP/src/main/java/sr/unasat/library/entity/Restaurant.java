@@ -32,4 +32,8 @@ public class Restaurant {
     @MapsId
     @JoinColumn(name = "tourist_id")
     private Tourist tourist;
+
+    public Restaurant(){
+
+    }
 }
