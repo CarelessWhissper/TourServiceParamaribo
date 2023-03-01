@@ -2,9 +2,11 @@ package sr.unasat.library.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
+import lombok.AllArgsConstructor;
 
 import sr.unasat.library.entity.Tourist;
 
@@ -12,31 +14,41 @@ import sr.unasat.library.repository.TouristRepo;
 import sr.unasat.library.service.TouristService;
 
 @Service
-public class TouristServiceImpl implements TouristService {
+@AllArgsConstructor
+public  class TouristServiceImpl implements TouristService {
 
-    @Autowired
-    TouristRepo touristRepo;
+    private TouristRepo touristRepo;
+
 
     @Override
-    public Tourist add(Tourist tourist) {
+    public Tourist createTourist (Tourist tourist){
         return touristRepo.save(tourist);
     }
 
     @Override
-    public List get() {
+    public List<Tourist> getAllTourists(){
         return touristRepo.findAll();
     }
 
     @Override
-    public Optional get(Long id) {
-        return touristRepo.findById(id);
+    public Tourist getTouristById(Long touristId){
+        Optional<Tourist> optionalTourist = touristRepo.findById(touristId);
+        return optionalTourist.get();
     }
 
+    @Override
+    public Tourist updateTourist(Tourist tourist){
+        Tourist existingTourist = touristRepo.findById(tourist.getId()).get();
+        existingTourist.setFullName(tourist.getFullName());
+        existingTourist.setDateOfBirth(tourist.getDateOfBirth());
+        existingTourist.setLocationOfOrigin(tourist.getLocationOfOrigin());
+
+        Tourist updatedTourist = touristRepo.save(existingTourist);
+        return  updatedTourist;
+    }
 
     @Override
-    public void delete(Long id) {
-        if (get(id).isPresent()) {
-            touristRepo.delete((Tourist) get(id).get());
-        }
+    public void deleteTourist(Long touristId){
+        touristRepo.deleteById(touristId);
     }
 }

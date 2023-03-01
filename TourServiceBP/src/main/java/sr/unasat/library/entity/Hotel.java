@@ -20,16 +20,21 @@ public class Hotel {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tourist_id",referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "tourist_id")
     private Tourist tourist;
 
+    @Column
     private String HotelName;
 
+    @Column
     private int NumberOfRooms;
 
+    @Column
     private LocalDateTime ReservationDetails;
 
+    @Column
     private int NumberOfStayingDays;
 
 

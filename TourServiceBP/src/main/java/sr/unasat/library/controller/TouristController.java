@@ -1,85 +1,70 @@
 package sr.unasat.library.controller;
 
+
 import java.util.List;
-import java.util.Optional;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 
 import sr.unasat.library.entity.Tourist;
+
 
 import sr.unasat.library.service.TouristService;
 
 @RestController
-@RequestMapping("/api")
+@AllArgsConstructor
+@RequestMapping("/api/tourists")
 public class TouristController {
 
-    @Autowired
-    TouristService touristService;
 
-    @GetMapping("/tourist")
-    public ResponseEntity<List<Tourist>> getAllTourists() {
-        try {
-            List<Tourist> list = touristService.get();
 
-            if (list.isEmpty() || list.size() == 0) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
+    private TouristService touristService;
 
-            return new ResponseEntity<>(list, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
 
+    // build create tourist REST API
+
+    @PostMapping
+     public ResponseEntity<Tourist> createTourist(@RequestBody Tourist tourist){
+        Tourist savedTourist = touristService.createTourist(tourist);
+        return  new ResponseEntity<>(savedTourist,HttpStatus.OK);
     }
 
-    @GetMapping("/tourist/{id}")
-    public ResponseEntity<Tourist> getTourist(@PathVariable Long id) {
-        Optional<Tourist> tourist = touristService.get(id);
 
-        if (tourist.isPresent()) {
-            return new ResponseEntity<Tourist>(tourist.get(), HttpStatus.OK);
-        }
-        return new ResponseEntity<Tourist>(HttpStatus.NOT_FOUND);
+    //build get tourist by id REST API
+
+   @GetMapping("{id}")
+    public ResponseEntity<Tourist> getTouristById(@PathVariable("id")Long touristId){
+        Tourist tourist = touristService.getTouristById(touristId);
+        return  new ResponseEntity<>(tourist,HttpStatus.OK);
+   }
+
+   //build get all tourist REST API
+
+   @GetMapping
+   public ResponseEntity<List<Tourist>>getAllTourists(){
+        List<Tourist> tourists = touristService.getAllTourists();
+        return new ResponseEntity<>(tourists,HttpStatus.OK);
+   }
+
+   //build update tourist REST API
+    @PutMapping ("{id}")
+    public ResponseEntity<Tourist> updateTourist(@PathVariable("id")Long touristId,
+                                                 @RequestBody Tourist tourist){
+        tourist.setId(touristId);
+        Tourist updatedTourist = touristService.updateTourist(tourist);
+        return  new ResponseEntity<>(updatedTourist,HttpStatus.OK);
     }
 
-    @PostMapping("/tourist")
-    public ResponseEntity<Tourist> saveTourist(@RequestBody Tourist tourist) {
-        try {
-            return new ResponseEntity<Tourist>(touristService.add(tourist), HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<Tourist>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    //build delete tourist REST API
 
+    @DeleteMapping
+    public ResponseEntity<String> deleteTourist(@PathVariable("id")Long touristId){
+        touristService.deleteTourist(touristId);
+        return new ResponseEntity<>("Tourists has been deleted",HttpStatus.OK);
     }
 
-    @PutMapping("/tourists")
-    public ResponseEntity<Tourist> updateTourist(@RequestBody Tourist tourist) {
-        try {
-            return new ResponseEntity<Tourist>(touristService.add(tourist), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<Tourist>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @DeleteMapping("/tourist/{id}")
-    public ResponseEntity<HttpStatus> deleteTourist(@PathVariable Long id) {
-        try {
-            touristService.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 }
+

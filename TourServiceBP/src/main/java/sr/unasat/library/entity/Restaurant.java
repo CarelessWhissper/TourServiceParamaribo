@@ -20,13 +20,16 @@ public class Restaurant {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private String RestaurantName;
 
+    @Column
     private int NumberOfPeople;
 
     private LocalDateTime ReservationDetails;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tourist_id",referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "tourist_id")
     private Tourist tourist;
 }

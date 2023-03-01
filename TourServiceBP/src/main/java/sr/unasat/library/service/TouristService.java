@@ -7,11 +7,13 @@ import  sr.unasat.library.entity.Tourist;
 
 public interface TouristService {
 
-    Tourist add (Tourist tourist);
+    Tourist createTourist( Tourist tourist);
 
-    List get();
+    Tourist getTouristById(Long touristId);
 
-    Optional get (Long id);
+    List<Tourist>getAllTourists();
 
-     void delete(Long id);
+    Tourist updateTourist(Tourist tourist);
+
+    void deleteTourist (Long touristId);
 }
