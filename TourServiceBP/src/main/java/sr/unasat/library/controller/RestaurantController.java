@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import sr.unasat.library.service.RestaurantService;
 import sr.unasat.library.entity.Restaurant;
 
-@CrossOrigin(origins = "http://localhost:8080")
+
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/restaurants")
 public class RestaurantController {
 
     private RestaurantService service;

@@ -5,12 +5,14 @@ import java.util.Objects;
 import java.util.Optional;
 
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import sr.unasat.library.entity.Ticket;
 import sr.unasat.library.repository.TicketRepo;
 import sr.unasat.library.service.TicketService;
 
 @Service
+@AllArgsConstructor
 public class TicketServiceImpl implements TicketService {
 
 

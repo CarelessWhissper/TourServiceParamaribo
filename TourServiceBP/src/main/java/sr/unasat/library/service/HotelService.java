@@ -2,6 +2,7 @@ package sr.unasat.library.service;
 
 import java.util.List;
 
+
 import org.springframework.stereotype.Service;
 import sr.unasat.library.entity.Hotel;
 
@@ -17,5 +18,7 @@ public interface HotelService {
     Hotel updateHotel(Hotel hotel);
 
     void deleteHotel(Long HotelId);
+
+
 
 }

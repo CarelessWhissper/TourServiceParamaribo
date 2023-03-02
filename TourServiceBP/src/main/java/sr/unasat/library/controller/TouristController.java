@@ -14,7 +14,6 @@ import sr.unasat.library.entity.Tourist;
 
 import sr.unasat.library.service.TouristService;
 
-@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/tourists")

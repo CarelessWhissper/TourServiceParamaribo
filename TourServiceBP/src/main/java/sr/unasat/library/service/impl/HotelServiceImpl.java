@@ -3,21 +3,24 @@ package sr.unasat.library.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import sr.unasat.library.entity.Hotel;
 import sr.unasat.library.repository.HotelRepo;
 import sr.unasat.library.service.HotelService;
-import org.springframework.util.StringUtils;
-import org.apache.logging.log4j.util.Strings;
+
 
 @Service
 @AllArgsConstructor
 public class HotelServiceImpl implements HotelService {
 
+
+
     private HotelRepo repo;
+
+
 
     @Override
     public Hotel createHotel(Hotel hotel){

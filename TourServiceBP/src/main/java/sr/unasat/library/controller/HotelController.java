@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,21 +14,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.*;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
+
 
 import sr.unasat.library.entity.Hotel;
 import sr.unasat.library.service.HotelService;
 
-@CrossOrigin(origins = "http://localhost:8080")
-@RestController
-@AllArgsConstructor
-@RequestMapping("/api/hotel")
-public class HotelController {
 
+@RestController
+@RequestMapping("/api/hotel")
+public class  HotelController {
+
+
+    @Autowired
     private HotelService service;
+
+    public HotelController(HotelService hotelService){
+        this.service = hotelService;
+    }
 
     //build create Hotel REST API
 
@@ -69,10 +75,12 @@ public class HotelController {
 
     //build delete Hotel REST API
 
-    @DeleteMapping
-    public ResponseEntity<String> deleteHotel(@PathVariable("id")Long HotelId){
-        service.deleteHotel(HotelId);
-        return new ResponseEntity<>("Hotel has been deleted",HttpStatus.OK);
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteHotel(@PathVariable("id") Long hotelId){
+        service.deleteHotel(hotelId);
+        return new ResponseEntity<>("Hotel has been deleted", HttpStatus.OK);
     }
+
 
 }

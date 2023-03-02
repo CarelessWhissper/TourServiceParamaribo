@@ -3,12 +3,13 @@ package sr.unasat.library.entity;
 import javax.persistence.*;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
-@AllArgsConstructor
+
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 @Setter
 @Getter
@@ -36,6 +37,17 @@ public class Hotel {
     @Column
     private int NumberOfStayingDays;
 
+    public Hotel(){
 
+    }
+
+    public Hotel(Tourist tourist,String name,int numberOfRooms, LocalDateTime reservationDetails, int numberOfStayingDays){
+        this.tourist = tourist;
+        this.HotelName = name;
+        this.NumberOfRooms = numberOfRooms;
+        this.ReservationDetails = reservationDetails;
+        this.NumberOfStayingDays = numberOfStayingDays;
+
+    }
 
 }

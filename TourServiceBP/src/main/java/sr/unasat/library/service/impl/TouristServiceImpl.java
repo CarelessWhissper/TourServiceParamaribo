@@ -2,7 +2,6 @@ package sr.unasat.library.service.impl;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Objects;
 
 
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ import sr.unasat.library.service.TouristService;
 @AllArgsConstructor
 public  class TouristServiceImpl implements TouristService {
 
-    private TouristRepo touristRepo;
+    private final TouristRepo touristRepo;
 
 
     @Override
