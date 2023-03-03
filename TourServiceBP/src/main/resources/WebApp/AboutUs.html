@@ -1,39 +1,341 @@
 <!DOCTYPE html>
 <html>
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Tourists Table</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
-    <script defer src="tourist.js"></script>
+    <link rel="stylesheet" href="About.css">
+    <script defer src="javascript.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <title>About Us: Rapports And Data overview</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </head>
 <body>
 
-<table id="tourist-table">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Full Name</th>
-        <th>Date of Birth</th>
-        <th>Location of Origin</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- Table rows will be dynamically added here -->
-    </tbody>
-</table>
-<form id="add-tourist-form">
-    <label for="fullname-input">Full Name:</label>
-    <input type="text" id="fullname-input" name="fullname">
 
-    <label for="dob-input">Date of Birth:</label>
-    <input type="date" id="dob-input" name="dob">
+<section>
+    <nav class="navbar fixed-top navbar-light bg-dark">
+        <form class="form-inline">
+            <a class="btn btn-info me-auto" href="homepage.html" role="button">Home</a>
+            <a class="btn btn-info me-auto" href="http://google.com" role="button">Get Your Tickets</a>
+            <a class="btn btn-info me-auto" href="hotel.html" role="button">Hotel</a>
+            <a class="btn btn-info me-auto" href="http://google.com" role="button">Restaurants</a>
+            <a class="btn btn-info me-auto" href="http://google.com" role="button">Contact Us</a>
+            <a class="btn btn-info me-auto" href="AboutUs.html" role="button">About Us</a>
+        </form>
 
-    <label for="location-input">Location of Origin:</label>
-    <input type="text" id="location-input" name="location">
+    </nav>
+</section>
 
-    <button type="submit">Add Tourist</button>
-</form>
 
+
+<section>
+    <div class="container text-center">
+        <div class="row">
+            <div class="col">
+                <h4>Rapports</h4>
+            </div>
+            <div class="col">
+                <h4>Data Overview</h4>
+            </div>
+            <div class="col">
+                <h4>And More</h4>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <figure  class="figure">
+        <img src="https://img.freepik.com/free-vector/flat-tourists-ready-holiday_23-2149059980.jpg" class="figure-img img-fluid rounded" alt="...">
+        <figcaption class="figure-caption text-end">Tourists In Suriname, Paramaribo Information.</figcaption>
+    </figure>
+</section>
+
+<section>
+    <div class="container">
+        <h1>Tourists Residing In Paramaribo</h1>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date of Birth</th>
+                <th>Location of Origin</th>
+                <th>Full Name</th>
+            </tr>
+            </thead>
+            <tbody id="tourists-table-body">
+            </tbody>
+        </table>
+    </div>
+
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "http://localhost:55763/api/tourists",
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    var tableBody = $("#tourists-table-body");
+                    $.each(data, function(index, tourist) {
+                        var row = $("<tr></tr>");
+                        row.append($("<td>" + tourist.id + "</td>"));
+                        row.append($("<td>" + tourist.dateOfBirth + "</td>"));
+                        row.append($("<td>" + tourist.locationOfOrigin + "</td>"));
+                        row.append($("<td>" + tourist.fullName + "</td>"));
+
+                        var actions = $("<td></td>");
+                        actions.append($("<button type='button' class='btn btn-success btn-sm mr-2' data-toggle='modal' data-target='#edit-modal' data-id='" + tourist.id + "' data-dateofbirth='" + tourist.dateOfBirth + "' data-locationOfOrigin='" + tourist.locationOfOrigin + "' data-fullName='" + tourist.fullName + "'>Create</button>"));
+                        actions.append($("<button type='button' class='btn btn-primary btn-sm mr-2' data-toggle='modal' data-target='#edit-modal' data-id='" + tourist.id + "' data-dateofbirth='" + tourist.dateOfBirth + "' data-locationOfOrigin='" + tourist.locationOfOrigin + "' data-fullName='" + tourist.fullName + "'>Edit</button>"));
+                        actions.append($("<button type='button' class='btn btn-danger btn-sm mr-2'  data-toggle='modal' data-target='#delete-modal' data-id='" + tourist.id + "'>Delete</button>"));
+
+                        row.append(actions);
+
+                        tableBody.append(row);
+                    });
+                }
+            });
+        });
+
+        $(document).ready(function() {
+            // Code to populate the table goes here
+
+            // Handle edit button click
+            $(document).on("click", "#edit-modal #edit-save", function() {
+                // Get form data
+                var id = $("#edit-id").val();
+                var fullname = $("#edit-fullname").val();
+                var dateofbirth = $("#edit-dateofbirth").val();
+                var locationoforigin = $("#edit-locationoforigin").val();
+
+                // Make AJAX request to update the tourist data
+                $.ajax({
+                    url: "http://localhost:55763/api/tourists/" + id,
+                    type: "PUT",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: {
+                        "fullName": fullname,
+                        "dateOfBirth": dateofbirth,
+                        "locationOfOrigin": locationoforigin
+                    },
+                    success: function(data) {
+                        // Update the table with the new data
+                        // ...
+                        // Hide the modal
+                        $("#edit-modal").modal("hide");
+                    },
+                    error: function() {
+                        alert("Error updating tourist data.");
+                    }
+                });
+            });
+        });
+
+        $("#create-submit").click(function() {
+            var fullName = $("#create-fullName").val();
+            var dateOfBirth = $("#create-dateOfBirth").val();
+            var locationOfOrigin = $("#create-locationOfOrigin").val();
+
+            $.ajax({
+                url: "http://localhost:55763/api/tourists",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "fullName": fullName,
+                    "dateOfBirth": dateOfBirth,
+                    "locationOfOrigin": locationOfOrigin
+                },
+                success: function(data) {
+                    // Update the table with the new data
+                    // ...
+                    // Hide the modal
+                    $("#create-modal").modal("hide");
+                },
+                error: function() {
+                    alert("Error creating tourist.");
+                }
+            });
+        });
+        // Handler for delete button click
+        $(document).on("click", ".delete-tourist-btn", function () {
+            var touristId = $(this).data("id");
+            var deleteUrl = "http://localhost:55763/api/tourists/" + tourist.id;
+
+            // Send DELETE request
+            $.ajax({
+                url: deleteUrl,
+                type: "DELETE",
+                success: function (data) {
+                    // Remove row from table
+                    $("tr[data-id='" + tourist.id + "']").remove();
+                },
+                error: function () {
+                    alert("Error deleting tourist.");
+                },
+            });
+        });
+    </script>
+    <!-- Edit Modal -->
+    <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="edit-modal-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="edit-modal-label">Edit Tourist Information</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <input type="hidden" id="edit-id">
+                        <div class="form-group">
+                            <label for="edit-fullname" class="col-form-label">Full Name:</label>
+                            <input type="text" class="form-control" id="edit-fullname">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-dateofbirth" class="col-form-label">Date of Birth:</label>
+                            <input type="date" class="form-control" id="edit-dateofbirth">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-locationoforigin" class="col-form-label">Location of Origin:</label>
+                            <input type="text" class="form-control" id="edit-locationoforigin">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="edit-save">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-modal-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="delete-modal-label">Confirm Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this tourist?</p>
+                    <input type="hidden" id="delete-id">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="delete-confirm">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-labelledby="create-modal-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="create-modal-label">Create Tourist</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="create-form">
+                        <div class="form-group">
+                            <label for="create-fullName">Full Name</label>
+                            <input type="text" class="form-control" id="create-fullName" name="fullName">
+                        </div>
+                        <div class="form-group">
+                            <label for="create-dateOfBirth">Date of Birth</label>
+                            <input type="text" class="form-control" id="create-dateOfBirth" name="dateOfBirth">
+                        </div>
+                        <div class="form-group">
+                            <label for="create-locationOfOrigin">Location of Origin</label>
+                            <input type="text" class="form-control" id="create-locationOfOrigin" name="locationOfOrigin">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="create-submit">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</section>
+
+<section>
+    <div class="container text-align">
+
+
+        <div class="col">
+            <h4>Restaurants</h4>
+        </div>
+
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <h2>Restaurant in Paramaribo</h2>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Restaurant name</th>
+                <th>Number of People</th>
+                <th>Reservation Time</th>
+                <th>Tourist Name</th>
+            </tr>
+            </thead>
+            <tbody id="restaurant-table-body">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "http://localhost:55763/api/restaurants",
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    var tableBody = $("#restaurant-table-body");
+                    $.each(data, function(index, restaurant) {
+                        var row = $("<tr></tr>");
+                        row.append($("<td>" + restaurant.id + "</td>"));
+                        row.append($("<td>" + restaurant.restaurantName + "</td>"));
+                        row.append($("<td>" + restaurant.numberOfPeople + "</td>"));
+                        row.append($("<td>" + restaurant.reservationDetails + "</td>"));
+                        row.append($("<td>" + restaurant.tourist.fullName + "</td>"));
+
+                        var actions = $("<td></td>");
+
+                        row.append(actions);
+
+                        tableBody.append(row);
+                    });
+                }
+            });
+        });
+
+    </script>
+
+</section>
 
 </body>
 </html>

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import sr.unasat.library.service.RestaurantService;
 import sr.unasat.library.entity.Restaurant;
 
-
+@CrossOrigin(origins = "*", allowedHeaders = "*", exposedHeaders = "Authorization", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/restaurants")
@@ -59,7 +59,7 @@ public class RestaurantController {
 
     //build delete Restaurant REST API
 
-    @DeleteMapping
+    @DeleteMapping({"id"})
     public ResponseEntity<String> deleteRestaurant(@PathVariable("id")Long restaurantId){
         service.deleteRestaurant(restaurantId);
         return new ResponseEntity<>("Restaurant has been deleted",HttpStatus.OK);

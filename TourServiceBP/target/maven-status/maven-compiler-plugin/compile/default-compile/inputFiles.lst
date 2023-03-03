@@ -11,6 +11,7 @@ D:\JS_projects\school_2023\TourServiceBP\src\main\java\sr\unasat\library\control
 D:\JS_projects\school_2023\TourServiceBP\src\main\java\sr\unasat\library\repository\TicketRepo.java
 D:\JS_projects\school_2023\TourServiceBP\src\main\java\sr\unasat\library\controller\HotelController.java
 D:\JS_projects\school_2023\TourServiceBP\src\main\java\sr\unasat\library\entity\Hotel.java
+D:\JS_projects\school_2023\TourServiceBP\src\main\java\sr\unasat\library\CustomCorsConfiguration.java
 D:\JS_projects\school_2023\TourServiceBP\src\main\java\sr\unasat\library\repository\RestaurantRepo.java
 D:\JS_projects\school_2023\TourServiceBP\src\main\java\sr\unasat\library\controller\TicketController.java
 D:\JS_projects\school_2023\TourServiceBP\src\main\java\sr\unasat\library\repository\HotelRepo.java

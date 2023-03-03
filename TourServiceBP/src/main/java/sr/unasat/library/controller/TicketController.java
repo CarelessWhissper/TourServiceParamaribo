@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import sr.unasat.library.entity.Ticket;
 import sr.unasat.library.service.TicketService;
 
-
+@CrossOrigin(maxAge = 3600)
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/tickets")
